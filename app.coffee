@@ -6,7 +6,6 @@ require("drews-mixins") _
 https = require "https"
 
 {s, wait, series} = _
-
 log = (args...) -> console.log args... 
 
 # reconnect 1 second after the connection closes
@@ -46,7 +45,9 @@ console.log _.keys(lds)
 username = config.lds.username
 password = config.lds.password
 lds.signIn username, password, ->
-  lds.getJSON (err, json) ->
+  lds.getCurrentUserUnit (err, json) ->
+    console.log json
+  false and lds.getJSON (err, json) ->
     console.log json
 
 app.get "/drew", (req, res) ->

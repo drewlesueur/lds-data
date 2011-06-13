@@ -12,9 +12,25 @@ https = require "https"
 
 {s, wait, series} = _
 log = (args...) -> console.log args... 
+# https://code.lds.org/wsvn/wsvn/mobilemember/webos/trunk/app/service.js 
 
 module.exports = do ->
   cookie = null
+
+  self = {} 
+  self.getCurrentUserUnit = (cb) -> getJSON '/directory/services/ludrs/mem/current-user-unitNo', cb
+  self.getStakeUnits = (cb) -> getJSON '/directory/services/ludrs/unit/current-user-stake-wards', cb
+  self.getStakeLeadership = (cb) -> getJSON '/directory/services/ludrs/unit/stake-leadership-positions', cb
+  self.getUnitMembership = (unit, cb) ->
+    getJSON '/directory/services/ludrs/mem/member-detaillist/#{unit}', cb
+  self.getUnitLeadership = (unit, cb) ->
+    getJSON '/directory/services/ludrs/1.1/unit/unit-leadershiplist/#{unit}', cb 
+  self.getUnitLeadershipNew = (unit, cb) ->
+    getJSON '/directory/services/ludrs/1.1/unit/unit-leadershiplist/#{unit}'
+  self.getPhotoUrl = (unit, member, cb) ->
+    getJSON '/directory/services/ludrs/photo/url/#{unit}/#{member}', cb 
+
+
   signIn = (username, password, callback) ->
     signInStep1 = (d) ->
       log "step 1"
@@ -101,5 +117,5 @@ module.exports = do ->
     signIn: signIn
     getJSON: getJSON
     cookie: cookie
-  return ret
+  return _.extend ret, self
 
