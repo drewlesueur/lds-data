@@ -1,0 +1,5 @@
+*.swp
+*.swo
+config.coffee
+config.js
+
